@@ -211,3 +211,30 @@ resource "aws_security_group" "allow_ssh" {
     var.tags,
   )
 }
+
+resource "aws_security_group" "allow_rds_mysql" {
+  name        = "allow_rds_mysql"
+  description = "Allow RDS(mysql) traffic"
+  vpc_id      = local.vpc_id
+
+  ingress {
+    description = "Allow RDS(mysql) Connection"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.main.cidr_block]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = merge(
+    { Name = "allow_rds_mysql-${var.name}" },
+    var.tags,
+  )
+}

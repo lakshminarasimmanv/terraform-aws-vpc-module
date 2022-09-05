@@ -27,3 +27,13 @@ output "sg_allow_ssh" {
   description = "ID of the SSH Security Group"
   value = try(aws_security_group.allow_ssh.id, "")
 }
+
+output "sg_allow_rds_mysql" {
+  description = "ID of the RDS(mysql) Security Group"
+  value = try(aws_security_group.allow_rds_mysql.id, "")
+}
+
+# output "" {
+#   description = ""
+#   value = try(, "")
+# }
