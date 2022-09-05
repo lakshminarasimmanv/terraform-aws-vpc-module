@@ -31,23 +31,11 @@ resource "aws_internet_gateway" "main" {
 
 ## Public Subnet -----
 resource "aws_subnet" "public" {
-  vpc_id = local.vpc_id
-  # cidr_block        = var.public_subnet
-  # availability_zone = var.az
+  count = length(var.public_subnets) > 0 && (length(var.public_subnets) >= length(var.azs)) ? length(var.public_subnets) : 0
 
-  count             = length(var.public_subnets) > 0 && (length(var.public_subnets) >= length(var.azs)) ? length(var.public_subnets) : 0
+  vpc_id            = local.vpc_id
   cidr_block        = element(concat(var.public_subnets, [""]), count.index)
   availability_zone = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
-
-  # tags = merge(
-  #   {
-  #     "Name" = format(
-  #       "${var.name}-${var.public_subnet_suffix}"
-  #     )
-  #   },
-  #   var.tags,
-  #   var.public_subnet_tags,
-  # )
 
   tags = merge(
     {
@@ -63,14 +51,17 @@ resource "aws_subnet" "public" {
 
 ## Private Subnet -----
 resource "aws_subnet" "private" {
+  count = length(var.private_subnets) > 0 ? length(var.private_subnets) : 0
+
   vpc_id            = local.vpc_id
-  cidr_block        = var.private_subnet
-  availability_zone = var.azs[0]
+  cidr_block        = var.private_subnets[count.index]
+  availability_zone = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
 
   tags = merge(
     {
       "Name" = format(
-        "${var.name}-${var.private_subnet_suffix}"
+        "${var.name}-${var.private_subnet_suffix}-%s",
+        element(var.azs, count.index),
       )
     },
     var.tags,

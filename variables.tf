@@ -66,10 +66,10 @@ variable "public_subnet_tags" {
   default     = {}
 }
 
-variable "private_subnet" {
+variable "private_subnets" {
   description = "A list of private subnets inside the VPC"
-  type        = string
-  default     = ""
+  type        = list(string)
+  default     = []
 }
 
 variable "private_subnet_tags" {
