@@ -110,7 +110,7 @@ resource "aws_route_table" "private" {
 resource "aws_route_table_association" "public" {
   count = length(var.public_subnets) > 0 ? length(var.public_subnets) : 0
 
-  route_table_id = aws_route_table.public[*].id
+  route_table_id = aws_route_table.public.id
   subnet_id      = element(aws_subnet.public[*].id, count.index)
 }
 
@@ -119,7 +119,7 @@ resource "aws_route_table_association" "private" {
   count = length(var.private_subnets) > 0 ? length(var.private_subnets) : 0
 
   subnet_id      = element(aws_subnet.private[*].id, count.index)
-  route_table_id = aws_route_table.private[*].id
+  route_table_id = aws_route_table.private.id
 }
 
 # Security Groups ----------
