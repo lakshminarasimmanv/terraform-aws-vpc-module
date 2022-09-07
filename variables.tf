@@ -54,6 +54,12 @@ variable "public_subnets" {
   default     = []           # ""
 }
 
+variable "public_ip_on_launch" {
+  description = "Map public IP for the subnet"
+  type = bool
+  default = false
+}
+
 variable "public_subnet_suffix" {
   description = "Suffix to append to public subnets name"
   type        = string
