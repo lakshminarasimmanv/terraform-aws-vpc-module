@@ -33,6 +33,11 @@ output "sg_allow_rds_mysql" {
   value       = try(aws_security_group.allow_rds_mysql.id, "")
 }
 
+output "vpc_cidr" {
+  description = "CIDR block range of VPC"
+  value       = try(aws_vpc.main.cidr_block, "")
+}
+
 # output "" {
 #   description = ""
 #   value = try(, "")
